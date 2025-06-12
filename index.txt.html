@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<!-- Faz o Safari abrir como app fullscreen -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FlorkTrick">
+
+<!-- Ícone que aparece na tela inicial -->
+<link rel="apple-touch-icon" href="https://i.postimg.cc/7YfCWfwN/Picsart-25-05-02-11-30-15-101.jpg">
+<head>
+  <meta charset="UTF-8">
+  <title>V3.1.109</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: #000;
+      overflow: hidden;
+      color: white;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    #panel {
+      width: 370px;
+      height: 310px;
+      background: rgba(26, 0, 43, 0.95);
+      border-radius: 0;
+      position: fixed;
+      top: 50%; /* Centraliza verticalmente */
+      left: 50%;
+      transform: translate(-50%, -50%); /* Centraliza horizontalmente */
+      z-index: 99;
+      border: 1px solid #b300ff;
+      overflow: hidden;
+      font-size: 12px;
+      display: block; /* Exibir o painel diretamente */
+    }
+
+    .header {
+      background: #1a001f;
+      padding: 12px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      border-bottom: 1px solid #b300ff;
+    }
+
+    .sidebar {
+      width: 100px;
+      float: left;
+      height: 100%;
+      background: #0c0013;
+      border-right: 1px solid #b300ff;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 8px 0;
+    }
+
+    .sidebar ul li {
+      padding: 8px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: white;
+    }
+
+    .sidebar ul li i {
+      margin-right: 6px;
+      width: 16px;
+      text-align: center;
+    }
+
+    .sidebar ul li:hover, .sidebar ul li.active {
+      background: #33004d;
+      color: #b300ff;
+      font-weight: bold;
+    }
+
+    .sidebar ul li.active i {
+      color: #b300ff;
+    }
+
+    .content {
+      margin-left: 100px;
+      padding: 10px;
+      height: 260px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .tab { display: none; }
+    .tab.active { display: block; }
+
+    input[type="checkbox"] { display: none; }
+
+    .custom-checkbox {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .checkbox-style {
+      width: 16px;
+      height: 16px;
+      border-radius: 5px;
+      background-color: #222;
+      border: 2px solid #555;
+      margin-right: 8px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    input[type="checkbox"]:checked + .checkbox-style {
+      background-color: #b300ff;
+      border-color: #b300ff;
+    }
+
+    input[type="checkbox"]:checked + .checkbox-style::after {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 10px;
+      transform: translate(-50%, -50%);
+    }
+
+    .custom-checkbox span { font-size: 12px; }
+
+    .footer {
+      font-size: 10px;
+      color: #ccc;
+      padding: 5px;
+      text-align: center;
+    }
+
+    .fov-slider-container {
+      margin-top: 10px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      color: white;
+    }
+
+    .fov-slider-container label { margin-right: 8px; }
+    .fov-value { color: #b300ff; font-weight: bold; margin-left: 8px; }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      background: #333;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #b300ff;
+      border: 2px solid #000;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    input[type=range]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: #b300ff;
+      border: 2px solid #000;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #keyUsada {
+      white-space: nowrap;
+      overflow-x: auto;
+      display: block;
+      max-width: 100%;
+      font-size: 12px;
+      color: #fff;
+      padding-bottom: 4px;
+    }
+
+    .separator {
+      width: 100%;
+      height: 1px;
+      background: #b300ff;
+      margin: 8px 0;
+    }
+
+    .footer {
+      font-size: 10px;
+      color: #ccc;
+      padding: 5px;
+      text-align: center;
+    }
+
+    /* Estilo do botão do Instagram */
+    .instagram-button {
+      position: absolute;
+      bottom: 20px; /* Distância do fundo */
+      right: 20px; /* Distância da direita */
+      width: 50px;
+      height: 50px;
+      background-color: transparent;
+      border: 2px solid #b300ff; /* Traçado roxo */
+      border-radius: 50%; /* Botão circular */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .instagram-button:hover {
+      background-color: rgba(179, 0, 255, 0.2); /* Efeito de hover */
+    }
+
+    .instagram-button i {
+      color: #b300ff; /* Cor do ícone */
+      font-size: 24px; /* Tamanho do ícone */
+    }
+  </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<div id="panel">
+  <div class="header">Nexus Sensix</div>
+  <div class="sidebar">
+    <ul>
+      <li class="tab-btn active" onclick="switchTab('aimbot')"><i class="fas fa-crosshairs"></i> Aimbot</li>
+      <li class="tab-btn" onclick="switchTab('fps')"><i class="fas fa-bolt"></i> fps</li>
+      <li class="tab-btn" onclick="switchTab('extra')"><i class="fas fa-star"></i> extra</li>
+      <li class="tab-btn" onclick="switchTab('info')"><i class="fas fa-info-circle"></i> Info</li>
+    </ul>
+  </div>
+  <div class="content">
+    <div id="aimbot" class="tab active">
+      <label class="custom-checkbox">
+        <input type="checkbox" checked>
+        <div class="checkbox-style"></div>
+        <span>Alto ajuste de alvo</span>
+      </label>
+      <label class="custom-checkbox">
+        <input type="checkbox" id="fovToggle">
+        <div class="checkbox-style"></div>
+        <span>Rastreamento suave de alvo</span>
+      </label>
+      <label class="custom-checkbox">
+        <input type="checkbox" id="fovToggle">
+        <div class="checkbox-style"></div>
+        <span>Aim trick</span>
+      </label>
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Aim aimlock</span>
+      </label>      
+      <label class="custom-checkbox">
+        <input type="checkbox" id="fovToggle">
+        <div class="checkbox-style"></div>
+        <span>ATIVAR FOV</span>
+      </label>
+      <div class="fov-slider-container">
+        <label for="fovRange">FOV</label>
+        <input type="range" min="10" max="360" value="0" id="fovRange">
+        <span class="fov-value" id="fovValue">100℅</span>
+      </div>
+      <div class="fov-slider-container">
+        <label for="fovRange">FORÇA DA PUXADA</label>
+        <input type="range" min="10" max="360" value="0" id="fovRange">
+        <span class="fov-value" id="fovValue">100℅</span>
+      </div>
+    </div>
+
+    <div id="fps" class="tab">
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Desligar efeitos</span>
+      </label>      
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Modo turbo fps </span>
+      </label>      
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Redução de particulas</span>
+      </label>      
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Compactar textura</span>
+      </label>
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Modo baixa latência</span>
+      </label>
+      <div class="fov-slider-container">
+        <label for="fovRange">Otimização de RAM</label>
+        <input type="range" min="10" max="360" value="120" id="fovRange">
+        <span class="fov-value" id="fovValue">500°</span>
+      </div>
+    </div>
+
+    <div id="extra" class="tab">
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>No recoil em 20℅</span>
+      </label>  
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Recarga rapida em 10℅</span>
+      </label>
+      <label class="custom-checkbox">
+        <input type="checkbox">
+        <div class="checkbox-style"></div>
+        <span>Gelo sem lag</span>
+      </label>
+      <label class="custom-checkbox">
+        <input type="checkbox" onclick="destroyPanel()">
+        <div class="checkbox-style"></div>
+        <span>Stream mode</span>
+      </label>
+      <div class="separator"></div>
+    </div>
+
+    <div id="info" class="tab">
+      <div class="separator"></div>
+      <div>Chave Usada: <span id="keyUsada"></span></div>
+      <div>Data de Expiração: <span id="expirationDate"></span></div>
+      <div class="separator"></div>
+      <div>Dono: Nexus Sensix</div>
+      <div class="separator"></div>
+      <div class="footer">Nexus Sensix - V1.109.X</div>
+    </div>
+  </div>
+  
+  <!-- Botão do Instagram -->
+  <a href="https://www.instagram.com/nexus.sensixx" target="_blank" class="instagram-button">
+    <i class="fab fa-instagram"></i>
+  </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+  window.onload = function() {
+    var key = localStorage.getItem('activationKey');
+    if (key) {
+      var expirationDate = localStorage.getItem('expirationDate');
+      document.getElementById('keyUsada').innerText = key;
+      document.getElementById('expirationDate').innerText = expirationDate;
+      document.getElementById('panel').style.display = 'block';
+    } else {
+      // Se não houver chave, exibir a tela de login
+      document.getElementById('login').style.display = 'flex';
+    }
+  };
+
+  function switchTab(tabName) {
+    var tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    var buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(button => button.classList.remove('active'));
+
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function destroyPanel() {
+    document.getElementById('panel').style.display = 'none';
+  }
+
+  // Inicializar partículas
+  particlesJS("particles-js", {
+    "particles": {
+      "number": {
+        "value": 80,
+        "density": {
+          "enable": true,
+          "value_area": 800
+        }
+      },
+      "color": {
+        "value": "#a000ff"
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 0,
+          "color": "#000000"
+        }
+      },
+      "opacity": {
+        "value": 0.5,
+        "random": false
+      },
+      "size": {
+        "value": 3,
+        "random": true
+      },
+      "line_linked": {
+        "enable": true,
+        "distance": 150,
+        "color": "#a000ff",
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 2,
+        "direction": "none",
+        "out_mode": "out"
+      }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": false
+        },
+        "onclick": {
+          "enable": false
+        },
+        "resize": true
+      }
+    },
+    "retina_detect": true
+  });
+</script>
+
+</body>
+</html>
